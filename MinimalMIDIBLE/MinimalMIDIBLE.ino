@@ -9,7 +9,6 @@
 #include <BleCommon.h>
 #include <BleDescriptor.h>
 
-
 #define TXRX_BUF_LEN              20 //max number of bytes
 #define RX_BUF_LEN                20 //max number of bytes
 uint8_t rx_buf[RX_BUF_LEN];
@@ -53,7 +52,6 @@ void noteOff(char chan, char note) //channel 1
   midiData[4] = 0;
 }
 
-
 BleService midiSvc(midiIOServiceUUID);
 BleCharacteristic midiChar(CHAR_UUID_MIDI, 5, BLE_CLIENT_ACCESS_READ_WRITE, BLE_CLIENT_NOTIFY_ENABLED);
 BlePeripheral customDevice;
@@ -90,13 +88,13 @@ void printBleDeviceAddress(BleDeviceAddress &address, const char *label)
  * Intel Curie BLE device */
 void blePeripheralEventCb(BlePeripheral &bleDevice, BlePeripheralEvent event, void *arg)
 {
- 
+
 }
 
 void setup() {
   LOG_SERIAL.begin(9600);
 
-  CHECK_STATUS(customDevice.setName("Auxren's MIDI"));
+  CHECK_STATUS(customDevice.setName("Auxren's MIDI")); //sets the advertising name of your device
   CHECK_STATUS(customDevice.init());
   CHECK_STATUS(customDevice.getLocalAddress(localAddress));
   customDevice.setEventCallback(blePeripheralEventCb);
@@ -107,10 +105,7 @@ void setup() {
   LOG_SERIAL.println("Bluetooth device active, waiting for connections...");
 }
 
-
-
 void loop() {
-
   int note = random(0, 127);
 
   noteOn(0, note, 127); //loads up midiData buffer
