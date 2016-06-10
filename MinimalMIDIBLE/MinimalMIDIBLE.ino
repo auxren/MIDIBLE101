@@ -11,8 +11,6 @@ int rx_buf_num, rx_state = 0;
 uint8_t rx_temp_buf[20];
 uint8_t outBufMidi[128];
 
-#define LOG_SERIAL Serial
-
 //Buffer to hold 5 bytes of MIDI data. Note the timestamp is forced
 uint8_t midiData[] = {0x80, 0x80, 0x00, 0x00, 0x00};
 
@@ -40,11 +38,10 @@ BLEService midiSvc("03B80E5A-EDE8-4B33-A751-6CE34EC4C700"); // create service
 BLECharacteristic midiChar("7772E5DB-3868-4112-A1A9-F2669D106BF3", BLEWrite | BLEWriteWithoutResponse | BLENotify | BLERead, 5);
 
 void setup() {
-  LOG_SERIAL.begin(9600);
-  //  Set MIDI baud rate:
-  Serial.begin(31250);
+  Serial.begin(9600);
+
   BLESetup();
-  LOG_SERIAL.println(("Bluetooth device active, waiting for connections..."));
+  Serial.println(("Bluetooth device active, waiting for connections..."));
 }
 
 void BLESetup()
@@ -91,17 +88,17 @@ void loop() {
 
 void midiDeviceConnectHandler(BLECentral& central) {
   // central connected event handler
-  LOG_SERIAL.print("Connected event, central: ");
-  LOG_SERIAL.println(central.address());
+  Serial.print("Connected event, central: ");
+  Serial.println(central.address());
 }
 
 void midiDeviceDisconnectHandler(BLECentral& central) {
   // central disconnected event handler
-  LOG_SERIAL.print("Disconnected event, central: ");
-  LOG_SERIAL.println(central.address());
+  Serial.print("Disconnected event, central: ");
+  Serial.println(central.address());
 }
 
 void midiCharacteristicWritten(BLECentral& central, BLECharacteristic& characteristic) {
   // central wrote new value to characteristic, update LED
-  LOG_SERIAL.print("Characteristic event, written: ");
+  Serial.print("Characteristic event, written: ");
 }
