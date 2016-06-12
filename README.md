@@ -9,6 +9,10 @@ Receiving MIDI is being worked on.
 The Airpeggiator project is an arpeggiator that you can control in the air using the Intel Curie's IMU. It calculates the roll and pitch and turns it into MIDI notes. I added in a quantizer with a few predefined scales. At the top of the sketch, you can set the key, scale, and tempo of the arpeggiator. 
 I think this project serves as a pretty good jumping point to music creation. 
 
+HardwiredMIDI fixes issues with the stock Arduino MIDI example not working on the Curie (Arduino 101). The fix is to use software serial and specify pins 0 and 1 for the TX/RX.
+
+MIDIReceiveEventHandler receives MIDI data over BLE. It then forwards that data out of the hardwired serial TX. I used this MIDI shield for testing: http://linksprite.com/wiki/index.php5?title=MIDI_Shield_for_Arduino
+
 Enjoy. Let me know if you have any questions or ideas or want to show off cool projects you did with this code. 
 
 oren@auxren.com
