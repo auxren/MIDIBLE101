@@ -11,7 +11,8 @@ I think this project serves as a pretty good jumping point to music creation.
 
 HardwiredMIDI fixes issues with the stock Arduino MIDI example not working on the Curie (Arduino 101). The fix is to use software serial and specify pins 0 and 1 for the TX/RX.
 
-MIDIReceiveEventHandler receives MIDI data over BLE. It then forwards that data out of the hardwired serial TX. I used this MIDI shield for testing: http://linksprite.com/wiki/index.php5?title=MIDI_Shield_for_Arduino
+MIDIReceiveEventHandler receives MIDI data over BLE. **Note, this is still buggy as of 6/14/2016** It then forwards that data out of the hardwired serial TX. I used this MIDI shield for testing: http://linksprite.com/wiki/index.php5?title=MIDI_Shield_for_Arduino
+
 
 Enjoy. Let me know if you have any questions or ideas or want to show off cool projects you did with this code. 
 
