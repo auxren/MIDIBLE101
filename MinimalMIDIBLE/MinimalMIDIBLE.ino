@@ -58,6 +58,13 @@
 */
 #include <CurieBLE.h>
 
+BLEPeripheral midiDevice; // create peripheral instance
+
+BLEService midiSvc("03B80E5A-EDE8-4B33-A751-6CE34EC4C700"); // create service
+
+// create switch characteristic and allow remote device to read and write
+BLECharacteristic midiChar("7772E5DB-3868-4112-A1A9-F2669D106BF3", BLEWrite | BLEWriteWithoutResponse | BLENotify | BLERead, 5);
+
 #define TXRX_BUF_LEN              20 //max number of bytes
 #define RX_BUF_LEN                20 //max number of bytes
 uint8_t rx_buf[RX_BUF_LEN];
@@ -69,27 +76,34 @@ uint8_t outBufMidi[128];
 uint8_t midiData[] = {0x80, 0x80, 0x00, 0x00, 0x00};
 
 //Loads up buffer with values for note On
-void noteOn(char chan, char note, char vel) //channel 1
+void noteOn(char chan, char note, char vel)
 {
   midiData[2] = 0x90 + chan;
   midiData[3] = note;
   midiData[4] = vel;
+  midiChar.setValue(midiData, 5);//midiData); //posts 5 bytes
 }
 
 //Loads up buffer with values for note Off
-void noteOff(char chan, char note) //channel 1
+void noteOff(char chan, char note) //channel
 {
   midiData[2] = 0x80 + chan;
   midiData[3] = note;
-  midiData[4] = 0;
+  midiData[4] = 0; //Velocity for note off set to 0
+  midiChar.setValue(midiData, 5);//midiData); //posts 5 bytes
 }
 
-BLEPeripheral midiDevice; // create peripheral instance
+//Loads up buffer with Continuous Controller messages
+void sendCC(char chan, char controller, char val)
+{
+  midiData[2] = 0xB0 + chan;
+  midiData[3] = controller;
+  midiData[4] = val;
+  midiChar.setValue(midiData, 5);//midiData); //posts 5 bytes
+}
 
-BLEService midiSvc("03B80E5A-EDE8-4B33-A751-6CE34EC4C700"); // create service
 
-// create switch characteristic and allow remote device to read and write
-BLECharacteristic midiChar("7772E5DB-3868-4112-A1A9-F2669D106BF3", BLEWrite | BLEWriteWithoutResponse | BLENotify | BLERead, 5);
+
 
 void setup() {
   Serial.begin(9600);
@@ -126,17 +140,17 @@ void BLESetup()
 
 void loop() {
 
-  /*Simple randome note player to test MIDI output
+  /* Simple random note player to test MIDI output
      Plays random note every 400ms
   */
   int note = random(0, 127);
-  //readMIDI();
-  noteOn(0, note, 127); //loads up midiData buffer
-  midiChar.setValue(midiData, 5);//midiData); //posts 5 bytes
+  noteOn(0, note, 127); //Send Note On to 'note' with velocity 127
   delay(200);
-  noteOff(0, note);
-  midiChar.setValue(midiData, 5);//midiData); //posts 5 bytes
+  noteOff(0, note); //Sends Note Off to 'note'
   delay(200);
+
+  /* Sending CC messages */
+  //sendCC(0, 20, note); //sends a random value to controller 20
 }
 
 
